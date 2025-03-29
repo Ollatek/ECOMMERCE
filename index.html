@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopSmart - Personalized Recommendations</title>
+ 
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">ShopSmart</div>
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search products..." id="searchInput">
+                <div class="autocomplete-results" id="autocompleteResults"></div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active">Home</a></li>
+                    <li><a href="#">Categories</a></li>
+                    <li><a href="#">Deals</a></li>
+                    <li><a href="#" id="dashboardLink">My Recommendations</a></li>
+                    <li><a href="#" id="loginBtn">Login</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main id="mainContent">
+        <!-- Home Page Content (Default View) -->
+        <div id="homePage">
+            <section class="hero">
+                <h1>Discover Products Made for You</h1>
+                <p>Our AI-powered recommendation system learns your preferences to show you products you'll love.</p>
+                <a href="#recommendations" class="btn" style="margin-top: 1rem;">Explore Recommendations</a>
+            </section>
+
+            <section id="recommendations">
+                <h2 class="section-title">Recommended for You</h2>
+                <div class="product-grid" id="recommendedProducts">
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="section-title">Trending Now</h2>
+                <div class="product-grid" id="trendingProducts">
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- User Dashboard (Hidden by Default) -->
+        <div id="dashboardPage" style="display: none;">
+            <h2 class="section-title">Your Recommendation Dashboard</h2>
+            
+            <div class="dashboard-grid">
+                <div class="dashboard-sidebar">
+                    <div class="user-profile">
+                        <img src="/api/placeholder/100/100" alt="Profile avatar" class="profile-avatar">
+                        <h3 id="userDisplayName">User Name</h3>
+                        <p id="userEmail">user@example.com</p>
+                    </div>
+                    
+                    <ul class="dashboard-menu">
+                        <li><a href="#" class="active" data-tab="recommendationsTab">Personalized Recommendations</a></li>
+                        <li><a href="#" data-tab="historyTab">Browsing History</a></li>
+                        <li><a href="#" data-tab="settingsTab">Recommendation Settings</a></li>
+                        <li><a href="#" data-tab="favoritesTab">Saved Items</a></li>
+                    </ul>
+                </div>
+                
+                <div class="dashboard-main">
+                    <div id="recommendationsTab" class="dashboard-section tab-content active">
+                        <div class="recommendation-tabs">
+                            <div class="recommendation-tab active" data-content="forYou">For You</div>
+                            <div class="recommendation-tab" data-content="similar">Similar to Recent Views</div>
+                            <div class="recommendation-tab" data-content="trending">Trending in Your Categories</div>
+                        </div>
+                        
+                        <div id="forYou" class="tab-content active">
+                            <div class="product-grid" id="userRecommendations">
+                                <div class="loading-spinner">
+                                    <div class="spinner"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="similar" class="tab-content">
+                            <div class="product-grid" id="similarProducts">
+                                <!-- Similar products will be loaded here -->
+                            </div>
+                        </div>
+                        
+                        <div id="trending" class="tab-content">
+                            <div class="product-grid" id="categoryTrending">
+                                <!-- Category trending products will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="historyTab" class="dashboard-section tab-content">
+                        <h3>Your Browsing History</h3>
+                        <div class="product-grid" id="browsingHistory">
+                            <!-- Browsing history will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <div id="settingsTab" class="dashboard-section tab-content">
+                        <h3>Customize Your Recommendations</h3>
+                        <form id="preferencesForm">
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; margin-bottom: 0.5rem;">Preferred Categories</label>
+                                <select multiple style="width: 100%; padding: 0.5rem; border-radius: var(--border-radius); border: 1px solid #ddd;">
+                                    <option>Electronics</option>
+                                    <option>Clothing</option>
+                                    <option>Home & Kitchen</option>
+                                    <option>Books</option>
+                                    <option>Sports & Outdoors</option>
+                                </select>
+                            </div>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; margin-bottom: 0.5rem;">Price Range</label>
+                                <div style="display: flex; gap: 1rem;">
+                                    <input type="number" placeholder="Min" style="width: 100%; padding: 0.5rem; border-radius: var(--border-radius); border: 1px solid #ddd;">
+                                    <input type="number" placeholder="Max" style="width: 100%; padding: 0.5rem; border-radius: var(--border-radius); border: 1px solid #ddd;">
+                                </div>
+                            </div>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <input type="checkbox"> Exclude previously purchased items
+                                </label>
+                            </div>
+                            
+                            <button type="submit" class="btn">Save Preferences</button>
+                        </form>
+                    </div>
+                    
+                    <div id="favoritesTab" class="dashboard-section tab-content">
+                        <h3>Your Saved Items</h3>
+                        <div class="product-grid" id="savedItems">
+                            <!-- Saved items will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Detail Page (Hidden by Default) -->
+        <div id="productPage" style="display: none;">
+            <div class="product-detail">
+                <!-- Product details will be loaded here -->
+            </div>
+            
+            <section>
+                <h2 class="section-title">You May Also Like</h2>
+                <div class="product-grid" id="relatedProducts">
+                    <!-- Related products will be loaded here -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-column">
+                <h4>Shop</h4>
+                <ul>
+                    <li><a href="#">New Arrivals</a></li>
+                    <li><a href="#">Best Sellers</a></li>
+                    <li><a href="#">Featured Products</a></li>
+                    <li><a href="#">Deals & Discounts</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Account</h4>
+                <ul>
+                    <li><a href="#">My Account</a></li>
+                    <li><a href="#">Order History</a></li>
+                    <li><a href="#">Wish List</a></li>
+                    <li><a href="#">Returns</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h4>About Us</h4>
+                <ul>
+                    <li><a href="#">Our Story</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Press</a></li>
+                    <li><a href="#">Careers</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Help</h4>
+                <ul>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Shipping Information</a></li>
+                    <li><a href="#">Returns & Exchanges</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>&copy; 2025 ShopSmart. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
